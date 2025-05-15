@@ -1,6 +1,6 @@
 import pytest
-from simple_orm.orm.engine import Model
-from simple_orm.orm.migrations import run_migrations
+from orm.engine import Model
+from orm.migrations import run_migrations
 
 
 class User(Model):
