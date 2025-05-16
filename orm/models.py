@@ -68,5 +68,4 @@ class Model:
         db.execute(query, (pk_value,))
 
 
-# Singleton instance of Database
 db = db

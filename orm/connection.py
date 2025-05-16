@@ -22,6 +22,4 @@ class Database:
         self.connection.close()
 
 
-# Singleton instance of Database
 db = Database()
-

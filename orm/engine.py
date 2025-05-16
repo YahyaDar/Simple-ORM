@@ -9,6 +9,10 @@ class Model:
     table_name: str
     fields: Dict[str, Field]
 
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
     @classmethod
     def create_table(cls):
         columns = [f"{name} {str(field)}" for name, field in cls.fields.items()]
@@ -47,13 +51,16 @@ class Model:
 
     def update(self, **kwargs) -> None:
         columns = ", ".join([f"{k} = %s" for k in kwargs.keys()])
-        values = tuple(kwargs.values()) + (getattr(self, "id"),)
-        query = f"UPDATE {self.table_name} SET {columns} WHERE id = %s;"
+        pk_name = self.__class__.primary_key
+        pk_value = getattr(self, pk_name)
+        values = tuple(kwargs.values()) + (pk_value,)
+        query = f"UPDATE {self.table_name} SET {columns} WHERE {pk_name} = %s;"
         db.execute(query, values)
 
     def delete(self) -> None:
-        pk_value = getattr(self, "id")
-        query = f"DELETE FROM {self.table_name} WHERE id = %s;"
+        pk_name = self.__class__.primary_key
+        pk_value = getattr(self, pk_name)
+        query = f"DELETE FROM {self.table_name} WHERE {pk_name} = %s;"
         db.execute(query, (pk_value,))
 
 
